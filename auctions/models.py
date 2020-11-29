@@ -6,12 +6,12 @@ class User(AbstractUser):
     pass
 
 class Listing(models.Model):
-    seller = models.ForeignKey(User, on_delete=models.CASCADE)
+    #seller = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
-    starting_bid = models.IntegerField()
+    start_bid = models.DecimalField(max_digits=225, decimal_places=2)
     category = models.CharField(max_length=255)
-    #image of object url = ...do we need a field for this?
-    winner = models.ForeignKey(User, related_name='Auction_Winner', on_delete=models.CASCADE)
+    image = models.CharField(max_length=255, null=True)
+    #winner = models.ForeignKey(User, related_name='Auction_Winner', on_delete=models.CASCADE)
     #created = models.DateTimeField(editable=False, null=True)
     #expires = models.DateTimeField(editable=False, null=True)
 

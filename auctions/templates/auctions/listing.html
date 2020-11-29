@@ -1,0 +1,26 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2> {{listing.title}} </h2>
+    <div >
+          <img src= {{listing.image}}
+          alt="Item Image not available"
+          style="width:30%;height:auto;">
+    </div>
+
+    <div>
+    <h4>Category:</h4>   {{listing.category}}
+    </div>
+
+    <div>
+    <h4>Description:</h4>
+    {{listing.descrip}}
+    </div>
+
+    <div>
+    <h4>Bid:</h4>
+    {{listing.start_bid}}
+    </div>
+
+
+{% endblock %}
