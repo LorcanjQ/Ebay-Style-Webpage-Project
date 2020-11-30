@@ -1,7 +1,34 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <h2>Active Listings</h2>
+    <h1>Active Listings</h1>
 
-    {{listings}}
+        {% for listing in listings %}
+
+              <h3> Listing: {{listing.title}} </h3>
+              <div >
+                    <img src= {{listing.image}}
+                    alt="Item Image not available"
+                    style="width:10%;height:auto;float:left;margin:0px 50px">
+              </div>
+
+              <div>
+              <b>Category:</b>   {{listing.category}}
+              </div>
+
+              <div>
+              <b>Description:</b>
+              {{listing.descrip}}
+              </div>
+
+              <div>
+              <b>Bid:</b>
+              {{listing.start_bid}}
+              </div>
+              <br>
+              <br>
+              <br>
+
+
+        {% endfor %}
 {% endblock %}
