@@ -4,30 +4,31 @@
     <h1>Active Listings</h1>
 
         {% for listing in listings %}
+<ul>
+  <h3> Listing: {{listing.title}} </h3>
+  <div >
+        <img src= {{listing.image}}
+        alt="Item Image not available"
+        style="width:10%;height:auto;float:left;margin:0px 50px">
+  </div>
+<br>
+  <div>
+  <b>Category:</b>   {{listing.category}}
+  </div>
 
-              <h3> Listing: {{listing.title}} </h3>
-              <div >
-                    <img src= {{listing.image}}
-                    alt="Item Image not available"
-                    style="width:10%;height:auto;float:left;margin:0px 50px">
-              </div>
+  <div>
+  <b>Description:</b>
+  {{listing.descrip}}
+  </div>
 
-              <div>
-              <b>Category:</b>   {{listing.category}}
-              </div>
+  <div>
+  <b>Bid:</b>
+  {{listing.start_bid}}
+  </div>
+  <br>
 
-              <div>
-              <b>Description:</b>
-              {{listing.descrip}}
-              </div>
+</ul>
 
-              <div>
-              <b>Bid:</b>
-              {{listing.start_bid}}
-              </div>
-              <br>
-              <br>
-              <br>
 
 
         {% endfor %}
