@@ -12,13 +12,15 @@ class Listing(models.Model):
     start_bid = models.DecimalField(max_digits=225, decimal_places=2)
     category = models.CharField(max_length=255)
     image = models.CharField(max_length=255, null=True)
+    date = models.DateTimeField(editable=False, null=True)
+    seller = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     #winner = models.ForeignKey(User, related_name='Auction_Winner', on_delete=models.CASCADE)
-    #created = models.DateTimeField(editable=False, null=True)
-    #expires = models.DateTimeField(editable=False, null=True)
+    created = models.DateTimeField(editable=False, null=True)
+    #
 
 class Bids(models.Model):
     auction = models.ForeignKey(Listing, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, related_name='bid_owner', on_delete=models.CASCADE)
+    #user = models.ForeignKey(User, related_name='bid_owner', on_delete=models.CASCADE)
     bid_amount = models.IntegerField()
 
 

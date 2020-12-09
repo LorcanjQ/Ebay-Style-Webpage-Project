@@ -1,5 +1,6 @@
 {% extends "auctions/layout.html" %}
 
+
 {% block body %}
     <h2>Create Listing: </h2>
 
@@ -7,23 +8,38 @@
         {% csrf_token %}
 
         <div class="form-group">
-            <input autofocus class="form-control" type="text" name="title" placeholder="Listing Title">
+            <input autofocus class="form-control"
+            type="text"
+            name="title"
+            placeholder="Listing Title">
         </div>
 
         <div class="form-group">
-            <input class="form-control" type="text" name="descrip" placeholder="Description of Listing Item">
+            <input class="form-control"
+            type="text"
+            name="descrip"
+            placeholder="Description of Listing Item">
         </div>
 
         <div class="form-group">
-            <input class="form-control" type="text" name="category" placeholder="Category of Item">
+            <input class="form-control"
+            type="text"
+            name="category"
+            placeholder="Category of Item">
         </div>
 
         <div class="form-group">
-            <input class="form-control" type="text" name="start_bid" placeholder="Starting Bid">
+            <input class="form-control"
+            type="text"
+            name="start_bid"
+            placeholder="Starting Bid">
         </div>
 
         <div class="form-group">
-            <input class="form-control" type="text" name="image" placeholder="URL of Image of item (optional)">
+            <input class="form-control"
+            type="text"
+            name="image"
+            placeholder="URL of Image of item (optional)">
         </div>
 
         <input class="btn btn-primary" type="submit" value="Launch Listing">

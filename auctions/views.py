@@ -3,6 +3,9 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from datetime import datetime
+from django.contrib.auth.decorators import login_required
+
 
 from .models import User,Listing
 
@@ -67,52 +70,31 @@ def register(request):
     else:
         return render(request, "auctions/register.html")
 
-
+@login_required
 def create(request):
 
     if request.method == "POST":
         listing = Listing()
+        listing.seller = request.user
         listing.title = request.POST["title"]
         listing.descrip = request.POST["descrip"]
         listing.start_bid = request.POST["start_bid"]
         listing.category = request.POST["category"]
         listing.image = request.POST["image"]
+        listing.date = datetime.today().strftime('%Y-%m-%d %H:%M')
         listing.save()
 
 
         return render(request, "auctions/listing.html", {
             "listing" : listing
-            #"title" : title,
-            #"descrip" : descrip,
-            #"bid" : start_bid,
-            #"category" : category,
-            #"image" : image
+
             })
     else:
         return render(request, "auctions/create.html")
 
+def listing(request,i_d):
+    return HttpResponse(i_d)
+    #render(request, "auctions/listing.html", {
+    #    "listing" : listing[i_d]
 
-
-
-
-#########
-        #book is from the plane file, gonna change it to launching a bid
-def book(request, flight_id):
-
-    # For a post request, add a new flight
-    if request.method == "POST":
-
-        # Accessing the flight
-        flight = Flight.objects.get(pk=flight_id)
-
-        # Finding the passenger id from the submitted form data
-        passenger_id = int(request.POST["passenger"])
-
-        # Finding the passenger based on the id
-        passenger = Passenger.objects.get(pk=passenger_id)
-
-        # Add passenger to the flight
-        passenger.flights.add(flight)
-
-        # Redirect user to flight page
-        return HttpResponseRedirect(reverse("flight", args=(flight.id,)))
+    #    })
