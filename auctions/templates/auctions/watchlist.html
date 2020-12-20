@@ -9,10 +9,10 @@
      >
 </head>
 
-    <h1>Active Listings</h1>
-
-        {% for listing in listings %}
+    <h1>Watchlist</h1>
 <ul class = "B">
+        {% for listing in wl %}
+
       <li>
         <div class = "pic_div">
 
@@ -52,9 +52,9 @@
         </div>
 
         <li>
-</ul>
-
-
+        {%empty%}
+        <li>No Listings favourited</li>
 
         {% endfor %}
+  </ul>
 {% endblock %}

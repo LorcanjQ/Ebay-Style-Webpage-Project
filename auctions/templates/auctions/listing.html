@@ -1,29 +1,63 @@
 {% extends "auctions/layout.html" %}
+{% load static %}
 
 {% block body %}
+<head>
+    <link
+    href="{% static 'auctions/p2s.css' %}"
+    rel="stylesheet"
+     >
+</head>
     <h2> {{listing.title}} </h2>
-    <div >
-          <img src= {{listing.image}}
+    <div class = pic_div>
+
+          <img class = pic_in_list
+          src= {{listing.image}}
           alt="Item Image not available"
-          style="width:30%;height:auto;">
+          >
     </div>
 
+    <div class="content" >
+
+      <h4>Description:</h4>
+      {{listing.descrip}}
+
+    <br><br>
+
+    <h5>Category:</h5>
+
+    {{listing.category}}
+
+    <br>
+      Listing created by {{listing.seller}}
+
+
+    <h5>Bid:</h5>
+    <div class=bid_price>
+    <b> €{{listing.start_bid}} </b>
+
+    </div>
     <div>
-    <h4>Category:</h4>   {{listing.category}}
+        {% if user.is_authenticated %}
+
+            <a  href="{% url 'add_fave' listing.id %} " class="btn btn-primary" role = "button" >
+              {% if 'user.id' in 'listing.favourited.all()' %}
+              Add to favourites
+              {%else%}
+              Remove from favourites
+              {% endif %}
+            </a>
+
+
+        {% else %}
+            Sign in to add this Listing to your favourites.
+        {% endif %}
     </div>
 
-    <div>
-      Created by {{listing.seller}}
-    </div>
 
-    <div>
-    <h4>Description:</h4>
-    {{listing.descrip}}
-    </div>
 
-    <div>
-    <h4>Bid:</h4>
-    {{listing.start_bid}}
+
+
     </div>
 
 

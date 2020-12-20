@@ -16,6 +16,7 @@ def index(request):
 
     return render(request, "auctions/index.html", {
         "listings": Listing.objects.all(),
+
     })
 
 
@@ -92,9 +93,43 @@ def create(request):
     else:
         return render(request, "auctions/create.html")
 
-def listing(request,i_d):
-    return HttpResponse(i_d)
-    #render(request, "auctions/listing.html", {
-    #    "listing" : listing[i_d]
 
-    #    })
+def listing(request, listing_id):
+
+    listing = Listing.objects.get(id=listing_id)
+    return render(request, "auctions/listing.html", {
+        "listing": listing
+    })
+
+@login_required
+def watchlist(request,user_id):
+    user = User.objects.get(id = user_id)
+    wl = user.faves.all()
+    return render(request, "auctions/watchlist.html", {
+        "user": user,
+        "wl": wl
+    })
+
+@login_required
+def add_fave(request, listing_id):
+    listing = Listing.objects.get(pk = listing_id)
+    if request.user.id in listing.favourited.all():
+#something wrong with the if statement here, doesnt check it properly
+        listing.favourited.remove(request.user.id)
+    else:
+        listing.favourited.add(request.user.id)
+    return HttpResponseRedirect(
+        reverse("listing", args=(listing_id,)))
+
+
+
+
+
+
+        #if request.method == "POST":
+        #    user = User.objects.get(pk = user_id)
+        #    #listing_id = int(request.GET["listing"])
+        #    listing = Listing.objects.get(pk = listing_id)
+        #    listing.faves.add(user)
+        #    return HttpResponseRedirect(
+        #    reverse("listing", args=(listing,)))

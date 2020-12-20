@@ -6,7 +6,7 @@ class User(AbstractUser):
     pass
 
 class Listing(models.Model):
-    #seller = models.ForeignKey(User, on_delete=models.CASCADE)
+
     title = models.CharField(max_length=255)
     descrip = models.CharField(max_length=255, null=True)
     start_bid = models.DecimalField(max_digits=225, decimal_places=2)
@@ -16,7 +16,12 @@ class Listing(models.Model):
     seller = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     #winner = models.ForeignKey(User, related_name='Auction_Winner', on_delete=models.CASCADE)
     created = models.DateTimeField(editable=False, null=True)
-    #
+    favourited = models.ManyToManyField(User, blank=True,default = None, related_name="faves")
+    #manytomany - can access each way
+    #(ie listing to users and users to listings)
+    #the "related name" above means you dont have
+    #to use user.listing_set.all() when doing
+    #users to listings link (ie dont need _set)
 
 class Bids(models.Model):
     auction = models.ForeignKey(Listing, on_delete=models.CASCADE)
