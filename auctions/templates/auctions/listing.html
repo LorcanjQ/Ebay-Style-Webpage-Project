@@ -8,6 +8,7 @@
     rel="stylesheet"
      >
 </head>
+
     <h2> {{listing.title}} </h2>
     <div class = pic_div>
 
@@ -32,33 +33,52 @@
       Listing created by {{listing.seller}}
 
 
-    <h5>Bid:</h5>
+    <h5>Current Price:</h5>
     <div class=bid_price>
+
     <b> €{{listing.start_bid}} </b>
-
     </div>
-    <div>
+
+    <!form action="{!% url 'place_bid' %}"
+    method="post" class="new_bid">
+      {% if user.is_authenticated %}
+        {% csrf_token %}
+
+        <!input class="form-control"
+        type="text"
+        name="bid"
+        placeholder="Bid amount:">
+
+
+    <!input class="btn btn-primary"
+    type="submit"
+    value="Place Bid">
+    {% else %}
+  <!div class = "normal">
+        Sign in to place a bid.
+
+    {% endif %}
+    <!/form>
+
+    <!/div>
+
         {% if user.is_authenticated %}
-
-            <a  href="{% url 'add_fave' listing.id %} " class="btn btn-primary" role = "button" >
-              {% if 'user.id' in 'listing.favourited.all()' %}
-              Add to favourites
-              {%else%}
-              Remove from favourites
-              {% endif %}
+        <div>
+            <a  href="{% url 'add_fave' listing.id %} "
+            class="btn btn-primary" role = "button" >
+            {{btn_name}}
             </a>
-
+        </div>
 
         {% else %}
+        <div class="normal">
             Sign in to add this Listing to your favourites.
+        </div>
         {% endif %}
-    </div>
 
 
 
-
-
-    </div>
+  </div>
 
 
 {% endblock %}

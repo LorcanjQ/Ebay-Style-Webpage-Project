@@ -16,6 +16,7 @@ def index(request):
 
     return render(request, "auctions/index.html", {
         "listings": Listing.objects.all(),
+        #"bids": Bids.objects.all()
 
     })
 
@@ -85,9 +86,16 @@ def create(request):
         listing.date = datetime.today().strftime('%Y-%m-%d %H:%M')
         listing.save()
 
+        #bid = Bids()
+        #bid.listing = listing
+        #bid.amount = request.POST["start_bid"]
+        #bid.save()
+
 
         return render(request, "auctions/listing.html", {
-            "listing" : listing
+            "listing" : listing,
+        #    "bid": bid,
+            "btn_name": "Add to favourites",
 
             })
     else:
@@ -97,9 +105,39 @@ def create(request):
 def listing(request, listing_id):
 
     listing = Listing.objects.get(id=listing_id)
+
+    #bid = Bids.objects.get(auction=listing)
+
+    list_faves = listing.favourited.all()
+
+    if request.user in list_faves:
+        btn_name = "Remove from favourites"
+    else:
+        btn_name = "Add to favourites"
+
     return render(request, "auctions/listing.html", {
-        "listing": listing
+        "listing": listing,
+        #"bid":bid,
+        "btn_name": btn_name,
+
     })
+
+
+
+@login_required
+def add_fave(request, listing_id):
+    #if request.method == "POST":
+    listing = Listing.objects.get(pk = listing_id)
+    list_faves = listing.favourited.all()
+    if request.user in list_faves:
+
+        listing.favourited.remove(request.user)
+    else:
+        listing.favourited.add(request.user)
+    return HttpResponseRedirect(
+        reverse("listing", args=(listing_id,)))
+
+
 
 @login_required
 def watchlist(request,user_id):
@@ -110,26 +148,7 @@ def watchlist(request,user_id):
         "wl": wl
     })
 
-@login_required
-def add_fave(request, listing_id):
-    listing = Listing.objects.get(pk = listing_id)
-    if request.user.id in listing.favourited.all():
-#something wrong with the if statement here, doesnt check it properly
-        listing.favourited.remove(request.user.id)
-    else:
-        listing.favourited.add(request.user.id)
-    return HttpResponseRedirect(
-        reverse("listing", args=(listing_id,)))
-
-
-
-
-
-
-        #if request.method == "POST":
-        #    user = User.objects.get(pk = user_id)
-        #    #listing_id = int(request.GET["listing"])
-        #    listing = Listing.objects.get(pk = listing_id)
-        #    listing.faves.add(user)
-        #    return HttpResponseRedirect(
-        #    reverse("listing", args=(listing,)))
+#def place_bid(request):
+#    if request.method == "POST":
+#        listing = Listing()
+#        listing.seller = request.user

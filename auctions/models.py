@@ -9,7 +9,7 @@ class Listing(models.Model):
 
     title = models.CharField(max_length=255)
     descrip = models.CharField(max_length=255, null=True)
-    start_bid = models.DecimalField(max_digits=225, decimal_places=2)
+    start_bid = models.DecimalField(max_digits=225, decimal_places=2, default = 0)
     category = models.CharField(max_length=255)
     image = models.CharField(max_length=255, null=True)
     date = models.DateTimeField(editable=False, null=True)
@@ -24,9 +24,9 @@ class Listing(models.Model):
     #users to listings link (ie dont need _set)
 
 class Bids(models.Model):
-    auction = models.ForeignKey(Listing, on_delete=models.CASCADE)
+    listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name='bids')
     #user = models.ForeignKey(User, related_name='bid_owner', on_delete=models.CASCADE)
-    bid_amount = models.IntegerField()
+    bid_amount = models.DecimalField(max_digits=225, decimal_places=2)
 
 
 class Comments(models.Model):
