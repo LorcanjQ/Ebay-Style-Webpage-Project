@@ -14,6 +14,7 @@ class Listing(models.Model):
     image = models.CharField(max_length=255, null=True)
     date = models.DateTimeField(editable=False, null=True)
     seller = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    last_bid = models.DateTimeField(editable=False, null = True)
     #winner = models.ForeignKey(User, related_name='Auction_Winner', on_delete=models.CASCADE)
     created = models.DateTimeField(editable=False, null=True)
     favourited = models.ManyToManyField(User, blank=True,default = None, related_name="faves")
@@ -25,8 +26,9 @@ class Listing(models.Model):
 
 class Bids(models.Model):
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name='bids')
-    #user = models.ForeignKey(User, related_name='bid_owner', on_delete=models.CASCADE)
-    bid_amount = models.DecimalField(max_digits=225, decimal_places=2)
+    user = models.ForeignKey(User, related_name='bid_owner', on_delete=models.CASCADE, null = True)
+    date = models.DateTimeField(editable=False, null=True)
+    #amount = models.DecimalField(max_digits=225, decimal_places=2)
 
 
 class Comments(models.Model):

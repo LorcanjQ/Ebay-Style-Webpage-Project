@@ -7,7 +7,7 @@ from datetime import datetime
 from django.contrib.auth.decorators import login_required
 
 
-from .models import User,Listing
+from .models import User,Listing,Bids
 
 auction_list = []
 
@@ -106,21 +106,35 @@ def listing(request, listing_id):
 
     listing = Listing.objects.get(id=listing_id)
 
-    #bid = Bids.objects.get(auction=listing)
-
     list_faves = listing.favourited.all()
 
     if request.user in list_faves:
         btn_name = "Remove from favourites"
     else:
         btn_name = "Add to favourites"
+    message = None
 
+    if request.method == "POST":
+        if float(request.POST["bid"]) > listing.start_bid:
+
+            bid = Bids()
+            bid.user = request.user
+            bid.listing = listing
+            bid.date = datetime.today().strftime('%Y-%m-%d %H:%M')
+            bid.save()
+
+            listing.start_bid =  request.POST["bid"]
+            listing.last_bid = bid.date
+            listing.save()
+        else:
+            message = "ERROR: Your bid must be greater than the current bid to be valid!"
     return render(request, "auctions/listing.html", {
         "listing": listing,
-        #"bid":bid,
         "btn_name": btn_name,
+        "message": message,
+        })
 
-    })
+
 
 
 
@@ -147,8 +161,3 @@ def watchlist(request,user_id):
         "user": user,
         "wl": wl
     })
-
-#def place_bid(request):
-#    if request.method == "POST":
-#        listing = Listing()
-#        listing.seller = request.user
