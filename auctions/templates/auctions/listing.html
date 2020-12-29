@@ -81,6 +81,16 @@
           </a>
       </div>
 
+          {%if request.user == listing.seller %}
+          <br>
+          <div>
+              <a  href="{% url 'add_fave' listing.id %} "
+              class="btn btn-primary" role = "button" >
+              End this Listing
+              </a>
+          </div>
+
+          {% endif %}
     {% else %}
       <div class = "normal">
           Sign in to place a bid.

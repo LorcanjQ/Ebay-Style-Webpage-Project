@@ -86,17 +86,9 @@ def create(request):
         listing.date = datetime.today().strftime('%Y-%m-%d %H:%M')
         listing.save()
 
-        #bid = Bids()
-        #bid.listing = listing
-        #bid.amount = request.POST["start_bid"]
-        #bid.save()
-
-
         return render(request, "auctions/listing.html", {
             "listing" : listing,
-        #    "bid": bid,
             "btn_name": "Add to favourites",
-
             })
     else:
         return render(request, "auctions/create.html")
@@ -140,7 +132,6 @@ def listing(request, listing_id):
 
 @login_required
 def add_fave(request, listing_id):
-    #if request.method == "POST":
     listing = Listing.objects.get(pk = listing_id)
     list_faves = listing.favourited.all()
     if request.user in list_faves:
