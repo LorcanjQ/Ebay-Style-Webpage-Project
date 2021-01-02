@@ -12,13 +12,12 @@ from .models import User,Listing,Bids
 auction_list = []
 
 
+
 def index(request):
-
+    listings = Listing.objects.exclude(active=False).all()
     return render(request, "auctions/index.html", {
-        "listings": Listing.objects.all(),
-        #"bids": Bids.objects.all()
-
-    })
+        "listings": listings,
+        })
 
 
 def login_view(request):
@@ -84,11 +83,11 @@ def create(request):
         listing.category = request.POST["category"]
         listing.image = request.POST["image"]
         listing.date = datetime.today().strftime('%Y-%m-%d %H:%M')
+        listing.active = True
         listing.save()
 
         return render(request, "auctions/listing.html", {
             "listing" : listing,
-            "btn_name": "Add to favourites",
             })
     else:
         return render(request, "auctions/create.html")
@@ -97,51 +96,41 @@ def create(request):
 def listing(request, listing_id):
 
     listing = Listing.objects.get(id=listing_id)
-
     list_faves = listing.favourited.all()
-
-    if request.user in list_faves:
-        btn_name = "Remove from favourites"
-    else:
-        btn_name = "Add to favourites"
     message = None
 
     if request.method == "POST":
-        if float(request.POST["bid"]) > listing.start_bid:
+        if 'bid' in request.POST:
+            if float(request.POST["bid"]) > listing.start_bid:
+                bid = Bids()
+                bid.user = request.user
+                bid.listing = listing
+                bid.date = datetime.today().strftime('%Y-%m-%d %H:%M')
+                bid.save()
 
-            bid = Bids()
-            bid.user = request.user
-            bid.listing = listing
-            bid.date = datetime.today().strftime('%Y-%m-%d %H:%M')
-            bid.save()
+                listing.start_bid =  request.POST["bid"]
+                listing.last_bid = bid.date
+                listing.winner = bid.user
+                listing.save()
+            else:
+                message = "ERROR: Your bid must be greater than the current bid to be valid!"
 
-            listing.start_bid =  request.POST["bid"]
-            listing.last_bid = bid.date
+        elif 'faved' in request.POST:
+            list_faves = listing.favourited.all()
+            if request.user in list_faves:
+                listing.favourited.remove(request.user)
+            else:
+                listing.favourited.add(request.user)
+
+        elif 'terminate' in request.POST:
+            listing.active = False
+            listing.favourited.remove(request.user)
             listing.save()
-        else:
-            message = "ERROR: Your bid must be greater than the current bid to be valid!"
+
     return render(request, "auctions/listing.html", {
         "listing": listing,
-        "btn_name": btn_name,
         "message": message,
         })
-
-
-
-
-
-@login_required
-def add_fave(request, listing_id):
-    listing = Listing.objects.get(pk = listing_id)
-    list_faves = listing.favourited.all()
-    if request.user in list_faves:
-
-        listing.favourited.remove(request.user)
-    else:
-        listing.favourited.add(request.user)
-    return HttpResponseRedirect(
-        reverse("listing", args=(listing_id,)))
-
 
 
 @login_required

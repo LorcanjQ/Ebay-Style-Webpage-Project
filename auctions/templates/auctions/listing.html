@@ -30,78 +30,117 @@
     {{listing.category}}
 
     <br>
-      Listing created by {{listing.seller}}
+
+    {% if listing.active == True %}
+
+
     <br>
-      Created: {{listing.date}}
-    {% if listing.last_bid %}
-      Last Bid on {{listing.last_bid}}
-    {%else%}
-      Be the first user to place a bid!
-    {%endif%}
+        Current price of this listing is {{listing.start_bid}}.
+        {% if request.user == listing.seller %}
+            You created this listing.
+        {% else %}
+        Listing created by {{listing.seller}}
+        {%endif%}
+    <br>
+            Created: {{listing.date}}
+          {% if listing.last_bid %}
+            Last Bid on {{listing.last_bid}}
+          {%else%}
+            {% if request.user != listing.seller %}
+            Be the first user to place a bid!
+            {%endif%}
+          {%endif%}
 
 
-    <h5>Current Price:</h5>
-    <div class=bid_price>
+          <h5>Current Price:</h5>
+          <div class=bid_price>
 
-    <b> €{{listing.start_bid}} </b>
-    </div>
-
-    {% if user.is_authenticated %}
-    <div>
-      <form action="{% url 'listing' listing.id %}"
-      method="post"
-      class="new_bid">
-
-          {% csrf_token %}
-
-          <input class="form-control"
-          type="number" step="0.01"
-          name="bid"
-          placeholder="Bid amount:">
-          <br>
-
-          {% if message %}
-              <div>{{ message }}</div>
-          {% endif %}
-          <br>
-
-
-
-          <input class="btn btn-primary"
-          type="submit"
-          value="Place Bid">
-
-
-      </form>
-      <br>
-      <div>
-          <a  href="{% url 'add_fave' listing.id %} "
-          class="btn btn-primary" role = "button" >
-          {{btn_name}}
-          </a>
-      </div>
-
-          {%if request.user == listing.seller %}
-          <br>
-          <div>
-              <a  href="{% url 'add_fave' listing.id %} "
-              class="btn btn-primary" role = "button" >
-              End this Listing
-              </a>
+          <b> €{{listing.start_bid}} </b>
           </div>
+
+          {% if user.is_authenticated %}
+          <div>
+            <form action="{% url 'listing' listing.id %}"
+            method="post"
+            name = "bid"
+            class="new_bid">
+
+                {% csrf_token %}
+
+                <input class="form-control"
+                type="number" step="0.01"
+                name="bid"
+                placeholder="Bid amount:">
+                <br>
+
+                {% if message %}
+                    <div>{{ message }}</div>
+                {% endif %}
+                <br>
+
+
+
+                <input class="btn btn-primary"
+                type="submit"
+                value="Place Bid">
+
+
+            </form>
+            <br>
+            <div>
+              <form action="{% url 'listing' listing.id %}"
+              method = "post">
+              {% csrf_token %}
+                <input
+                class="btn btn-primary"
+                type = "submit"
+                name = "faved"
+                "{% if request.user in listing.favourited.all %}"
+                value = "Remove from favourites"
+                "{% else %}"
+                value = "Add to favourites"
+                "{%endif%}"
+                >
+
+                </input>
+              </form>
+
+            </div>
+
+                {%if request.user == listing.seller %}
+                <br>
+
+                <form action="{% url 'listing' listing.id %}"
+                method = "post">
+                  {% csrf_token %}
+                  <input class="btn btn-primary"
+                  type="submit"
+                  name = "terminate"
+                  value="Terminate Listing">
+
+                </form>
+
+                {% endif %}
+          {% else %}
+            <div class = "normal">
+                Sign in to place a bid.
+            </div>
+
+            <div class="normal">
+                Sign in to add this Listing to your favourites.
+            </div>
 
           {% endif %}
     {% else %}
-      <div class = "normal">
-          Sign in to place a bid.
-      </div>
-
-      <div class="normal">
-          Sign in to add this Listing to your favourites.
-      </div>
-
+          This listing is now closed.
+          <br>
+          Final bid amounted to {{listing.start_bid}}.
+          {% if request.user == listing.winner%}
+          You won this listing!
+          {% else %}
+          {{listing.winner}} was the winner.
+          {% endif %}
     {% endif %}
-
   </div>
 
 

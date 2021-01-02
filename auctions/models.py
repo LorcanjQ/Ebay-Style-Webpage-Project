@@ -15,9 +15,11 @@ class Listing(models.Model):
     date = models.DateTimeField(editable=False, null=True)
     seller = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     last_bid = models.DateTimeField(editable=False, null = True)
-    #winner = models.ForeignKey(User, related_name='Auction_Winner', on_delete=models.CASCADE)
+    winner = models.ForeignKey(User, related_name='Auction_Winner', on_delete=models.CASCADE, default = 1)
     created = models.DateTimeField(editable=False, null=True)
     favourited = models.ManyToManyField(User, blank=True,default = None, related_name="faves")
+    active = models.BooleanField(default=True)
+
     #manytomany - can access each way
     #(ie listing to users and users to listings)
     #the "related name" above means you dont have
@@ -28,7 +30,7 @@ class Bids(models.Model):
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name='bids')
     user = models.ForeignKey(User, related_name='bid_owner', on_delete=models.CASCADE, null = True)
     date = models.DateTimeField(editable=False, null=True)
-    #amount = models.DecimalField(max_digits=225, decimal_places=2)
+
 
 
 class Comments(models.Model):
@@ -36,4 +38,3 @@ class Comments(models.Model):
     author = models.CharField(max_length=200)
     text = models.TextField()
     #created_date = models.DateTimeField(default=timezone.now)
-    approved_comment = models.BooleanField(default=False)
