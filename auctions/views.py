@@ -5,9 +5,10 @@ from django.shortcuts import render
 from django.urls import reverse
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
+import operator
 
 
-from .models import User,Listing,Bids
+from .models import User,Listing,Bids, Comments
 
 auction_list = []
 
@@ -97,7 +98,9 @@ def listing(request, listing_id):
 
     listing = Listing.objects.get(id=listing_id)
     list_faves = listing.favourited.all()
+    ordered_comments = listing.comments.all().order_by('-created_on')
     message = None
+    new_comment = None
 
     if request.method == "POST":
         if 'bid' in request.POST:
@@ -127,9 +130,20 @@ def listing(request, listing_id):
             listing.favourited.remove(request.user)
             listing.save()
 
+        elif 'comment' in request.POST:
+            comment = Comments()
+            comment.listing = listing
+            comment.text = request.POST["comment"]
+            comment.author = request.user
+            comment.created_on = datetime.today().strftime('%Y-%m-%d %H:%M')
+            comment.save()
+            
+
+
     return render(request, "auctions/listing.html", {
         "listing": listing,
         "message": message,
+        "comments": ordered_comments,
         })
 
 

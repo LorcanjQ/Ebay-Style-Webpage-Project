@@ -59,7 +59,7 @@
           </div>
 
           {% if user.is_authenticated %}
-          <div>
+          {% if request.user != listing.seller %}
             <form action="{% url 'listing' listing.id %}"
             method="post"
             name = "bid"
@@ -86,6 +86,7 @@
 
 
             </form>
+            {% endif %}
             <br>
             <div>
               <form action="{% url 'listing' listing.id %}"
@@ -120,7 +121,49 @@
 
                 </form>
 
+
                 {% endif %}
+                <br>
+                {% if comments %}
+
+                    {% for comment in comments %}
+
+
+                          <div class = "comment_content">
+                            {{comment.created_on}}
+                            <h6>{{comment.author}} commented:</h6>
+                            {{comment.text}}
+                          </div>
+                          <br>
+
+
+
+
+                      {% endfor %}
+
+                {% endif %}
+                        <form action="{% url 'listing' listing.id %}"
+                        method="post"
+                        class="comment">
+
+                            {% csrf_token %}
+                            <div>
+                            <input class="form-control"
+                            type="text" name="comment"
+                            placeholder="Add comment:"
+                            class = "comment">
+                            </div>
+                            <br>
+
+                            <input class="btn btn-primary"
+                            type="submit"
+                            value="Post Comment">
+
+
+                        </form>
+
+
+
           {% else %}
             <div class = "normal">
                 Sign in to place a bid.

@@ -2,6 +2,7 @@
   border-style:solid;
   border-width: thin;
   list-style-type:none;
+
   }
 
 .pic_div {
@@ -19,6 +20,15 @@
   padding-left:400px;
   padding-bottom: 100px;
   padding-top: 25px
+
+}
+
+.comment_content{
+  border-style:solid;
+  border-width: thin;
+  list-style-type:none;
+  width:40%;
+  padding-left:10px
 
 }
 .bid_price {
@@ -42,4 +52,10 @@
 .normal {
   font-family: "Times New Roman", Times, serif;
   font-size: 20px;
+}
+
+.comment {
+  width: 50%;
+
+  padding-top:25px;
 }
