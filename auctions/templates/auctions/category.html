@@ -1,0 +1,56 @@
+{% extends "auctions/layout.html" %}
+{% load static %}
+
+{% block body %}
+<head>
+    <link
+    href="{% static 'auctions/p2s.css' %}"
+    rel="stylesheet"
+     >
+</head>
+
+    <h1>Listings in Category: {{cat_type}}</h1>
+
+        {% for listing in category %}
+<ul class = "B">
+      <li>
+        <div class = "pic_div">
+
+              <img class = "pic_in_list"
+              src= {{listing.image}}
+              >
+
+        </div>
+      </li>
+      <li >
+        <div class="content">
+            <a href="{% url 'listing' listing.id %}">
+                  <h3> Listing: {{listing.title}} </h3>
+            </a>
+
+        <br>
+
+        <b>Description:</b>
+
+        {{listing.descrip}}
+
+        <br>
+
+
+        <b>Bid:</b>
+        {{listing.start_bid}}
+
+        <br><br>
+        Created: {{listing.date}}
+        <br>
+        Created by {{listing.seller}}
+
+        </div>
+
+        <li>
+</ul>
+
+
+
+        {% endfor %}
+{% endblock %}

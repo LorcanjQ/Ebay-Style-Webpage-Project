@@ -27,7 +27,10 @@
 
     <h5>Category:</h5>
 
-    {{listing.category}}
+    <a href= "{% url 'category' listing.category %}">
+      {{listing.category}}
+    </a>
+
 
     <br>
 

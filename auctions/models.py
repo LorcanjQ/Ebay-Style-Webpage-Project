@@ -10,7 +10,7 @@ class Listing(models.Model):
     title = models.CharField(max_length=255)
     descrip = models.CharField(max_length=255)
     start_bid = models.DecimalField(max_digits=225, decimal_places=2, default = 0)
-    category = models.CharField(max_length=255)
+
     image = models.CharField(max_length=255, null=True)
     date = models.DateTimeField(editable=False)
     seller = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -18,6 +18,7 @@ class Listing(models.Model):
     winner = models.ForeignKey(User, related_name='Auction_Winner',on_delete=models.CASCADE, null=True)
     favourited = models.ManyToManyField(User, blank=True,related_name="faves")
     active = models.BooleanField(default=True)
+    category = models.CharField(max_length=225,default= 'Other')
 
     #manytomany - can access each way
     #(ie listing to users and users to listings)

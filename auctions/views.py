@@ -91,7 +91,9 @@ def create(request):
             "listing" : listing,
             })
     else:
-        return render(request, "auctions/create.html")
+        return render(request, "auctions/create.html", {
+        "listing": Listing()
+        })
 
 
 def listing(request, listing_id):
@@ -101,6 +103,7 @@ def listing(request, listing_id):
     ordered_comments = listing.comments.all().order_by('-created_on')
     message = None
     new_comment = None
+    categories = ['clothing','electronics']
 
     if request.method == "POST":
         if 'bid' in request.POST:
@@ -137,13 +140,14 @@ def listing(request, listing_id):
             comment.author = request.user
             comment.created_on = datetime.today().strftime('%Y-%m-%d %H:%M')
             comment.save()
-            
+
 
 
     return render(request, "auctions/listing.html", {
         "listing": listing,
         "message": message,
         "comments": ordered_comments,
+        "categories": categories
         })
 
 
@@ -154,4 +158,13 @@ def watchlist(request,user_id):
     return render(request, "auctions/watchlist.html", {
         "user": user,
         "wl": wl
+    })
+
+def category(request, category_id):
+    listing = Listing.objects.all()
+    category = listing.filter(category= category_id).all()
+    return render(request, "auctions/category.html", {
+        "category": category,
+        "cat_type": category_id,
+
     })
