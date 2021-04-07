@@ -103,7 +103,6 @@ def listing(request, listing_id):
     ordered_comments = listing.comments.all().order_by('-created_on')
     message = None
     new_comment = None
-    categories = ['clothing','electronics']
 
     if request.method == "POST":
         if 'bid' in request.POST:
@@ -141,13 +140,10 @@ def listing(request, listing_id):
             comment.created_on = datetime.today().strftime('%Y-%m-%d %H:%M')
             comment.save()
 
-
-
     return render(request, "auctions/listing.html", {
         "listing": listing,
         "message": message,
         "comments": ordered_comments,
-        "categories": categories
         })
 
 

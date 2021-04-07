@@ -18,7 +18,12 @@ class Listing(models.Model):
     winner = models.ForeignKey(User, related_name='Auction_Winner',on_delete=models.CASCADE, null=True)
     favourited = models.ManyToManyField(User, blank=True,related_name="faves")
     active = models.BooleanField(default=True)
-    category = models.CharField(max_length=225,default= 'Other')
+    category_CHOICE = [
+    ('clothing','clothing'),
+    ('food','food')
+    ]
+    category = models.CharField(max_length=225,
+    choices=category_CHOICE,default= 'Other')
 
     #manytomany - can access each way
     #(ie listing to users and users to listings)
